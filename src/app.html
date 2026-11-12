@@ -1,0 +1,576 @@
+<title>Prana Sadhana</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Telugu:wght@400;700&display=swap">
+<style>
+/* Layout: one calm player card at the top (orb + count + cue), the session plan and settings below it. Twilight ground, saffron lamp-glow accent. */
+:root {
+  --bg: #e9edf5;
+  --surface: #f8f9fc;
+  --ink: #1c2140;
+  --muted: #59607d;
+  --line: #d3d9e7;
+  --accent: #b9650f;
+  --accent-ink: #fffaf2;
+  --glow: #f3b65c;
+  --glow-soft: rgba(243, 182, 92, .28);
+  --done: #4f7a5a;
+  --f-display: "Marcellus", "Noto Sans Devanagari", "Noto Sans Telugu", "Iowan Old Style", Georgia, serif;
+  --f-body: "Karla", "Noto Sans Devanagari", "Noto Sans Telugu", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1329; --surface: #171c38; --ink: #ebe7f3; --muted: #9ba1c0; --line: #29305a;
+    --accent: #f0a640; --accent-ink: #1a1306; --glow: #f6c26b; --glow-soft: rgba(246, 194, 107, .2); --done: #8cc49a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1329; --surface: #171c38; --ink: #ebe7f3; --muted: #9ba1c0; --line: #29305a;
+  --accent: #f0a640; --accent-ink: #1a1306; --glow: #f6c26b; --glow-soft: rgba(246, 194, 107, .2); --done: #8cc49a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 920px; margin: 0 auto; display: grid; gap: 22px; }
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+h1 { font-family: "Marcellus", Georgia, serif; font-weight: 400; font-size: 1.9rem; margin: 0; letter-spacing: .01em; }
+.tag { color: var(--muted); margin: 2px 0 0; font-size: .95rem; }
+.headright { display: grid; gap: 10px; justify-items: end; }
+.langs { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; }
+.langs button { border: 0; padding: 6px 14px; font-size: .95rem; }
+.langs button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.week { display: flex; gap: 6px; align-items: center; }
+.week span { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); font-size: .72rem; color: var(--muted); }
+.week span.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.week span.today { outline: 2px solid var(--glow); outline-offset: 1px; }
+.week .streak { border: 0; width: auto; height: auto; font-size: .8rem; margin-left: 6px; }
+@media (max-width: 560px) { .headright { justify-items: start; } }
+
+/* Player */
+.player { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 26px 22px 22px; display: grid; gap: 18px; justify-items: center; text-align: center; }
+.eyebrow { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+.stage { position: relative; width: min(300px, 78vw); aspect-ratio: 1; max-width: 100%; display: grid; place-items: center; }
+.orb { position: absolute; inset: 0; border-radius: 50%; transform: scale(.55);
+  background: radial-gradient(circle at 50% 42%, var(--glow) 0%, var(--accent) 62%, transparent 72%);
+  box-shadow: 0 0 80px 10px var(--glow-soft); opacity: .92; will-change: transform; }
+.ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed var(--line); }
+.orb.idle { animation: idle 6s ease-in-out infinite; }
+@keyframes idle { 0%,100% { transform: scale(.55); } 50% { transform: scale(.66); } }
+.center { position: relative; display: grid; color: var(--accent-ink); }
+:lang(hi) .eyebrow, :lang(te) .eyebrow, :lang(hi) .of, :lang(te) .of { letter-spacing: 0; text-transform: none; }
+.big { font-family: var(--f-display); font-size: 4.2rem; line-height: 1.05; font-variant-numeric: tabular-nums; text-shadow: 0 1px 12px rgba(0,0,0,.18); }
+.of { font-size: .85rem; letter-spacing: .06em; opacity: .9; }
+.nostrils { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.nos { padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+.nos.active { border-color: var(--accent); color: var(--ink); background: var(--glow-soft); font-weight: 700; }
+.nos.closed { opacity: .5; }
+.cue { font-family: var(--f-display); font-size: clamp(1.45rem, 4.6vw, 2.1rem); line-height: 1.3; margin: 0; text-wrap: balance; max-width: 30ch; }
+.sub { color: var(--muted); margin: 6px auto 0; max-width: 46ch; text-wrap: balance; min-height: 1.5em; }
+.caption { font-size: .9rem; color: var(--muted); max-width: 52ch; margin: 0; font-style: italic; min-height: 1.4em; }
+.warn { font-size: .88rem; color: var(--ink); background: var(--glow-soft); border-radius: 10px; padding: 8px 12px; margin: 0; max-width: 52ch; }
+.times { display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; }
+.times b { color: var(--ink); font-weight: 700; }
+.bar { display: flex; gap: 4px; width: 100%; height: 8px; }
+.seg { background: var(--line); border-radius: 4px; overflow: hidden; min-width: 6px; }
+.seg i { display: block; height: 100%; width: 0; background: var(--accent); }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+button { font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); padding: 10px 18px; }
+button:hover { border-color: var(--accent); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--glow); outline-offset: 2px; }
+.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; padding: 12px 34px; font-size: 1.05rem; min-width: 170px; }
+.primary:hover { filter: brightness(1.06); }
+
+/* Lower grid */
+.lower { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+@media (max-width: 760px) { .lower { grid-template-columns: 1fr; } }
+section > h2 { font-family: var(--f-display); font-weight: 400; font-size: 1.3rem; margin: 0 0 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+section > h2 small { font-family: var(--f-body); font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.plan { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: p; }
+.plan li { counter-increment: p; }
+.plan button { width: 100%; text-align: left; border: 0; border-radius: 12px; padding: 10px 12px; display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: start; }
+.plan button::before { content: counter(p); font-family: "Marcellus", Georgia, serif; color: var(--muted); font-size: 1.1rem; line-height: 1.3; }
+.plan button:hover { background: var(--glow-soft); }
+.plan .nm { font-weight: 700; display: block; }
+.plan .ds { color: var(--muted); font-size: .9rem; display: block; }
+.plan .du { color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.plan li.active button { background: var(--glow-soft); }
+.plan li.active button::before { color: var(--accent); }
+.plan li.done .nm { color: var(--done); }
+.plan li.done button::before { content: "✓"; color: var(--done); }
+.hint { color: var(--muted); font-size: .85rem; margin: 8px 12px 0; }
+
+form.settings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+.settings label { display: grid; gap: 4px; font-size: .85rem; color: var(--muted); min-width: 0; }
+.settings .wide { grid-column: 1 / -1; }
+.settings input[type=number], .settings select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; width: 100%; }
+.settings .check { grid-template-columns: auto 1fr; align-items: center; gap: 8px; color: var(--ink); font-size: .95rem; }
+.settings input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); }
+.settings input[type=range] { accent-color: var(--accent); width: 100%; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.row button { padding: 7px 14px; font-size: .9rem; }
+.note { font-size: .85rem; color: var(--muted); }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 6px; }
+footer p { margin: 0; max-width: 75ch; }
+@media (prefers-reduced-motion: reduce) { .orb.idle { animation: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Prana Sadhana</h1>
+      <p class="tag" id="tagline"></p>
+    </div>
+    <div class="headright">
+      <div class="langs" id="langs" role="group" aria-label="Language"></div>
+      <div class="week" id="week" aria-label="Practice this week"></div>
+    </div>
+  </header>
+
+  <main class="player" aria-live="polite">
+    <div class="eyebrow" id="phaseName"></div>
+    <div class="stage">
+      <div class="ring"></div>
+      <div class="orb idle" id="orb"></div>
+      <div class="center"><span class="big" id="big">ॐ</span><span class="of" id="of"></span></div>
+    </div>
+    <div class="nostrils" id="nostrils" hidden>
+      <span class="nos" id="nosL"></span>
+      <span class="nos" id="nosR"></span>
+    </div>
+    <div>
+      <p class="cue" id="cue"></p>
+      <p class="sub" id="sub"></p>
+    </div>
+    <p class="caption" id="caption"></p>
+    <p class="warn" id="warn" hidden></p>
+    <div class="times"><span><span id="lblStep"></span> <b id="stepTime">–</b></span><span><span id="lblLeft"></span> <b id="leftTime">–</b></span></div>
+    <div class="bar" id="bar"></div>
+    <div class="controls">
+      <button class="primary" id="startBtn" type="button"></button>
+      <button id="skipBtn" type="button"></button>
+      <button id="resetBtn" type="button"></button>
+    </div>
+  </main>
+
+  <div class="lower">
+    <section>
+      <h2><span id="lblToday"></span> <small id="total"></small></h2>
+      <ol class="plan" id="plan"></ol>
+      <p class="hint" id="hint"></p>
+    </section>
+
+    <section>
+      <h2>Adjust</h2>
+      <form class="settings" id="settings">
+        <label>Breathing rounds<input type="number" id="rounds" min="1" max="60"></label>
+        <label>Breathe in (sec)<input type="number" id="inhale" min="2" max="20"></label>
+        <label>Breathe out (sec)<input type="number" id="exhale" min="3" max="60"></label>
+        <label>Anulom Vilom rounds<input type="number" id="avRounds" min="0" max="40"></label>
+        <label>Nostril in (sec)<input type="number" id="avIn" min="2" max="12"></label>
+        <label>Nostril out (sec)<input type="number" id="avOut" min="2" max="20"></label>
+        <label class="wide">Silent meditation (min)<input type="number" id="medMin" min="0" max="60"></label>
+        <label class="check wide"><input type="checkbox" id="voice">Spoken guidance</label>
+        <label class="check wide"><input type="checkbox" id="om">Om tone to chant along with</label>
+        <label class="check wide"><input type="checkbox" id="chime">Soft chime when the breath changes</label>
+        <label class="wide">Voice for the chosen language<select id="voiceName"></select></label>
+        <label class="wide">Speaking pace <input type="range" id="rate" min="0.6" max="1.2" step="0.05"></label>
+        <div class="row wide">
+          <button type="button" id="testVoice">Hear the voice</button>
+          <button type="button" id="testOm">Hear the Om</button>
+          <button type="button" id="defaults">Restore defaults</button>
+        </div>
+        <p class="note wide" id="setNote">Changes are saved on this device and apply from the next start.</p>
+      </form>
+    </section>
+  </div>
+
+  <footer>
+    <p>Breathe through the nose, without force. If you feel dizzy, return to normal breathing and shorten the out-breath in Adjust. Check with your doctor first if you are pregnant or have heart or blood-pressure conditions.</p>
+    <p>Every word is read from a fixed script for each language, so the session is the same every day. Durations are fixed in seconds. The voice itself comes from your device's text-to-speech.</p>
+    <p>On a phone: open this page, use the browser's Share menu and choose Add to Home Screen. Keep the screen on during practice.</p>
+  </footer>
+</div>
+
+<!--TRANSCRIPTS-->
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const TX = JSON.parse($('transcripts').textContent);
+const LANGS = Object.keys(TX);
+const DEFAULTS = { rounds: 20, inhale: 5, exhale: 20, avRounds: 15, avIn: 4, avOut: 6, medMin: 10, voice: true, om: true, chime: true, rate: 0.9, voiceName: '', lang: '' };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+let S = Object.assign({}, DEFAULTS, store.get('prana.settings', {}));
+if (!TX[S.lang]) { const nav = (navigator.language || 'en').slice(0, 2); S.lang = TX[nav] ? nav : 'en'; }
+
+/* ---------- transcript lookup (fixed text, placeholders only) ---------- */
+const fill = (str, v) => String(str ?? '').replace(/\{(\w+)\}/g, (_, k) => v && v[k] != null ? v[k] : '');
+const T = () => TX[S.lang];
+const ui = (k, v) => fill(T().ui[k] ?? TX.en.ui[k], v);
+function line(key, v) {
+  const L = T().lines[key] || TX.en.lines[key] || {};
+  return { say: fill(L.say, v), cue: fill(L.cue ?? L.say, v), sub: fill(L.sub, v) };
+}
+
+/* ---------- session spec: every duration is a fixed number of seconds ---------- */
+// Spoken instructions carry wait:true: if the voice is still talking when the time is up, the step holds (at most 12 s) so no sentence is cut.
+const L = (key, dur, extra = {}) => Object.assign({ key, dur, orb: 'rest' }, extra);
+function omTriplet() {
+  const out = [];
+  for (let k = 1; k <= 3; k++) {
+    out.push(L('omIn', 3.5, { orb: 'in', count: k, total: 3 }));
+    out.push(L('omChant', 11, { orb: 'out', om: true, count: k, total: 3 }));
+  }
+  out.push(L('omSilence', 5));
+  return out;
+}
+function buildPhases() {
+  const P = [];
+  P.push({ id: 'arrive', steps: [L('arrive1', 9, { bell: 'start', wait: true }), L('arrive2', 8, { wait: true }), L('arrive3', 14)] });
+  P.push({ id: 'openOm', steps: [L('omIntro', 9, { wait: true }), ...omTriplet()] });
+  if (S.rounds > 0) {
+    const v = { r: S.rounds, e: S.exhale, i: S.inhale };
+    const steps = [L('deep1', 5, { v, wait: true }), L('deep2', 10, { wait: true }), L('deep3', 8, { v, wait: true }), L('deep4', 5, { wait: true })];
+    for (let i = 1; i <= S.rounds; i++) {
+      const c = { count: i, total: S.rounds, v: { n: i } };
+      steps.push(L(i === S.rounds && S.rounds > 1 ? 'roundInLast' : 'roundIn', S.inhale, Object.assign({ orb: 'in', tone: 'in' }, c)));
+      steps.push(L(i <= 3 ? 'roundOutLong' : 'roundOut', S.exhale, Object.assign({ orb: 'out', tone: 'out', countdown: true }, c)));
+    }
+    steps.push(L('deepRest', 10, { wait: true }));
+    P.push({ id: 'deep', v, steps });
+  }
+  if (S.avRounds > 0) {
+    const steps = [L('av1', 6, { wait: true }), L('av2', 10, { wait: true }), L('av3', 12, { wait: true }), L('av4', 5, { wait: true })];
+    for (let j = 1; j <= S.avRounds; j++) {
+      const c = { count: j, total: S.avRounds, v: { n: j } };
+      const first = j === 1 ? 'avInLFirst' : (j === S.avRounds ? 'avInLLast' : 'avInL');
+      steps.push(L(first, S.avIn, Object.assign({ orb: 'in', nos: 'L', tone: 'in' }, c)));
+      steps.push(L('avExR', S.avOut, Object.assign({ orb: 'out', nos: 'R', tone: 'out' }, c)));
+      steps.push(L('avInR', S.avIn, Object.assign({ orb: 'in', nos: 'R', tone: 'in' }, c)));
+      steps.push(L('avExL', S.avOut, Object.assign({ orb: 'out', nos: 'L', tone: 'out' }, c)));
+    }
+    steps.push(L('avRest', 8, { wait: true }));
+    P.push({ id: 'anulom', v: { n: S.avRounds }, steps });
+  }
+  if (S.medMin > 0) {
+    const half = S.medMin * 30, v = { m: S.medMin };
+    P.push({ id: 'med', v, steps: [
+      L('med1', 5, { v, wait: true }), L('med2', 9, { wait: true }), L('med3', 9, { wait: true }),
+      L('medA', half, { orb: 'still', bell: 'start', clock: true }),
+      L('medB', S.medMin * 60 - half, { orb: 'still', bell: 'soft', clock: true })
+    ]});
+  }
+  P.push({ id: 'close', steps: [
+    L('close1', 6, { bell: 'start', wait: true }), L('close2', 5, { wait: true }), ...omTriplet(),
+    L('shanti', 8, { wait: true }), L('palms', 12, { wait: true }), L('end', 6, { bell: 'start', wait: true })
+  ]});
+  return P;
+}
+
+let phases = [], steps = [], phaseStart = [];
+function rebuild() {
+  phases = buildPhases(); steps = []; phaseStart = [];
+  phases.forEach((p, pi) => {
+    p.dur = 0; phaseStart.push(steps.length);
+    p.steps.forEach(s => { s.pi = pi; p.dur += s.dur; steps.push(s); });
+  });
+  renderPlan();
+}
+
+/* ---------- audio ---------- */
+let ctx = null, master = null, verb = null, omNodes = [];
+function audio() {
+  if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+  ctx = new AC();
+  master = ctx.createGain(); master.gain.value = 0.9;
+  const comp = ctx.createDynamicsCompressor(); master.connect(comp); comp.connect(ctx.destination);
+  verb = ctx.createConvolver();
+  // Reverb impulse from a fixed seed, so the sound is identical every session.
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const len = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (rnd() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
+  verb.buffer = ir; const wet = ctx.createGain(); wet.gain.value = 0.32; verb.connect(wet); wet.connect(master);
+  return ctx;
+}
+function out(node) { node.connect(master); node.connect(verb); }
+function playOm(dur) {
+  if (!S.om || !audio()) return;
+  const t = ctx.currentTime + 0.05, f = 136.1, end = t + dur - 0.4;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.2, t + 0.9);
+  g.gain.setValueAtTime(0.2, Math.max(t + 1, end - 2.4)); g.gain.exponentialRampToValueAtTime(0.0001, end);
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 3;
+  lp.frequency.setValueAtTime(1100, t); lp.frequency.linearRampToValueAtTime(950, t + dur * .25);
+  lp.frequency.linearRampToValueAtTime(520, t + dur * .45); lp.frequency.linearRampToValueAtTime(230, t + dur * .62);
+  const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 6;
+  bp.frequency.setValueAtTime(760, t); bp.frequency.linearRampToValueAtTime(700, t + dur * .25);
+  bp.frequency.linearRampToValueAtTime(380, t + dur * .45); bp.frequency.linearRampToValueAtTime(260, t + dur * .62);
+  const bpg = ctx.createGain(); bpg.gain.value = 0.9;
+  const lfo = ctx.createOscillator(), lfoG = ctx.createGain(); lfo.frequency.value = 4.6; lfoG.gain.value = 0.7; lfo.connect(lfoG);
+  const oscs = [[f, 'sawtooth', 0.5], [f * 1.004, 'sawtooth', 0.35], [f / 2, 'sine', 0.55], [f, 'sine', 0.3]].map(([fr, type, lvl]) => {
+    const o = ctx.createOscillator(), og = ctx.createGain(); o.type = type; o.frequency.value = fr; og.gain.value = lvl;
+    lfoG.connect(o.frequency); o.connect(og);
+    if (type === 'sawtooth') { og.connect(lp); og.connect(bp); } else og.connect(g);
+    o.start(t); o.stop(end + 0.1); return o;
+  });
+  lp.connect(g); bp.connect(bpg); bpg.connect(g); out(g);
+  lfo.start(t); lfo.stop(end + 0.1);
+  omNodes.push({ g, oscs });
+}
+function stopOm() {
+  if (!ctx) return; const t = ctx.currentTime;
+  omNodes.forEach(n => { try { n.g.gain.cancelScheduledValues(t); n.g.gain.setTargetAtTime(0.0001, t, 0.15); n.oscs.forEach(o => o.stop(t + 0.8)); } catch (e) {} });
+  omNodes = [];
+}
+function bell(soft) {
+  if (!audio()) return; const t = ctx.currentTime + 0.02, base = 293.7;
+  [[1, .3], [2.01, .1], [2.76, .14], [5.4, .05], [8.93, .02]].forEach(([m, a]) => {
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = base * m;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(a * (soft ? .45 : 1), t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + (soft ? 5 : 8) / Math.sqrt(m));
+    o.connect(g); out(g); o.start(t); o.stop(t + 9);
+  });
+}
+function chime(dir) {
+  if (!audio()) return; const t = ctx.currentTime + 0.02;
+  const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine';
+  o.frequency.setValueAtTime(dir === 'in' ? 440 : 523, t); o.frequency.exponentialRampToValueAtTime(dir === 'in' ? 523 : 392, t + 0.5);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+  o.connect(g); out(g); o.start(t); o.stop(t + 1);
+}
+
+/* ---------- voice: only voices that match the chosen language ---------- */
+const synth = window.speechSynthesis;
+let voices = [], speaking = false;
+const voicesFor = code => (synth ? synth.getVoices() : []).filter(v => v.lang && v.lang.toLowerCase().replace('_', '-').startsWith(code));
+function loadVoices() {
+  const code = S.lang, want = T().meta.speechLang.toLowerCase();
+  voices = voicesFor(code);
+  const rank = v => (v.lang.toLowerCase().replace('_', '-') === want ? 0 : 1) + (v.localService ? 0 : 0.5);
+  voices.sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name));
+  const sel = $('voiceName'); sel.innerHTML = '';
+  if (!voices.length) sel.add(new Option(`No ${T().meta.englishName} voice on this device`, ''));
+  voices.forEach(v => sel.add(new Option(`${v.name} (${v.lang})`, v.name)));
+  if (voices.length) sel.value = voices.some(v => v.name === S.voiceName) ? S.voiceName : voices[0].name;
+  const missing = S.voice && !voices.length;
+  $('warn').hidden = !missing; $('warn').textContent = missing ? ui('noVoice') : '';
+}
+const hasVoice = () => S.voice && synth && voices.length > 0;
+function speak(text) {
+  if (!hasVoice() || !text) return;
+  try { synth.resume(); } catch (e) {}
+  const u = new SpeechSynthesisUtterance(text); u.rate = S.rate; u.pitch = 0.95;
+  const v = voices.find(v => v.name === $('voiceName').value) || voices[0];
+  u.voice = v; u.lang = v.lang;
+  speaking = true; u.onend = u.onerror = () => { speaking = synth.speaking; };
+  synth.speak(u);
+}
+if (synth) { synth.onvoiceschanged = loadVoices; }
+
+/* ---------- engine ---------- */
+let idx = -1, running = false, stepWall = 0, carried = 0, lastTick = 0, scale = 0.55, fromScale = 0.55, wakeLock = null, finished = false;
+const now = () => performance.now();
+const elapsed = () => carried + (running ? (now() - stepWall) / 1000 : 0);
+
+function enterStep(i) {
+  idx = i; carried = 0; stepWall = now(); fromScale = scale;
+  const s = steps[i]; if (!s) return finish();
+  stopOm();
+  if (s.bell) bell(s.bell === 'soft');
+  if (s.tone && (S.chime || !hasVoice())) chime(s.tone);
+  if (s.om) playOm(s.dur);
+  speak(line(s.key, s.v).say);
+  render(true);
+}
+function next() { if (idx + 1 >= steps.length) finish(); else enterStep(idx + 1); }
+
+function tick() {
+  const t = now();
+  if (running && lastTick && t - lastTick > 4000) {   // page was suspended (phone locked / app switched): pause where we were
+    carried += (lastTick - stepWall) / 1000; running = false; stopOm(); if (synth) synth.cancel();
+    $('sub').textContent = ui('sleptSub'); updateButton(); lastTick = t; return;
+  }
+  lastTick = t;
+  if (running) {
+    const s = steps[idx], e = elapsed();
+    const holding = s.wait && hasVoice() && (speaking || synth.speaking) && e < s.dur + 12;
+    if (e >= s.dur && !holding) next();
+  }
+  if (idx >= 0 && !finished) render(false);
+}
+setInterval(tick, 200);
+function frame() { if (running && idx >= 0) drawOrb(); requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+
+function drawOrb() {
+  const s = steps[idx], p = Math.min(1, elapsed() / s.dur), e = 0.5 - Math.cos(Math.PI * p) / 2;
+  if (s.orb === 'rest') scale = fromScale + (0.66 - fromScale) * Math.min(1, p * 3) + Math.sin(elapsed() * 1.1) * 0.02;
+  else { const target = s.orb === 'in' ? 1 : s.orb === 'out' ? 0.5 : 0.62; scale = fromScale + (target - fromScale) * e; }
+  $('orb').style.transform = `scale(${scale.toFixed(4)})`;
+}
+
+const fmt = s => { s = Math.max(0, Math.ceil(s)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+function render(full) {
+  const s = steps[idx]; if (!s) return;
+  const e = elapsed(), rem = s.dur - e, ln = line(s.key, s.v);
+  let left = rem; for (let k = idx + 1; k < steps.length; k++) left += steps[k].dur;
+  $('stepTime').textContent = fmt(rem); $('leftTime').textContent = fmt(left);
+  if (s.count) { $('big').textContent = s.count; $('of').textContent = ui('of', { n: s.total }); }
+  else if (s.clock) { $('big').textContent = fmt(rem); $('of').textContent = ui('remaining'); }
+  else { $('big').textContent = 'ॐ'; $('of').textContent = phaseText(phases[s.pi]).name; }
+  if (s.countdown) $('sub').textContent = `${ui('seconds', { n: Math.max(0, Math.ceil(rem)) })} · ${ln.sub}`;
+  phases.forEach((p, pi) => {
+    const start = phaseStart[pi], endI = start + p.steps.length; let done = 0;
+    if (idx >= endI) done = p.dur; else if (idx >= start) { for (let k = start; k < idx; k++) done += steps[k].dur; done += Math.min(e, s.dur); }
+    const bar = document.querySelector(`#bar .seg[data-p="${pi}"] i`); if (bar) bar.style.width = (100 * done / p.dur).toFixed(2) + '%';
+  });
+  if (!full) return;
+  $('orb').classList.remove('idle');
+  $('phaseName').textContent = phaseText(phases[s.pi]).name;
+  $('cue').textContent = ln.cue;
+  if (!s.countdown) $('sub').textContent = ln.sub;
+  $('caption').textContent = ln.say && ln.say !== ln.cue ? `“${ln.say}”` : '';
+  $('nostrils').hidden = !s.nos;
+  if (s.nos) {
+    const dir = ui(s.orb === 'in' ? 'in' : 'out');
+    $('nosL').className = 'nos ' + (s.nos === 'L' ? 'active' : 'closed'); $('nosR').className = 'nos ' + (s.nos === 'R' ? 'active' : 'closed');
+    $('nosL').textContent = `${ui('left')} · ${s.nos === 'L' ? dir : ui('closed')}`;
+    $('nosR').textContent = `${ui('right')} · ${s.nos === 'R' ? dir : ui('closed')}`;
+  }
+  document.querySelectorAll('#plan li').forEach((li, pi) => { li.classList.toggle('active', pi === s.pi); li.classList.toggle('done', pi < s.pi); });
+}
+
+function updateButton() {
+  $('startBtn').textContent = ui(running ? 'pause' : (idx >= 0 && !finished ? 'resume' : 'begin'));
+  $('settings').querySelectorAll('input,select').forEach(el => el.disabled = running);
+  $('setNote').textContent = running ? 'Settings are locked while you practise.' : 'Changes are saved on this device and apply from the next start.';
+}
+async function keepAwake() { try { if ('wakeLock' in navigator && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => wakeLock = null); } } catch (e) {} }
+function releaseAwake() { try { wakeLock && wakeLock.release(); } catch (e) {} wakeLock = null; }
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && running) keepAwake(); });
+
+function start() {
+  audio(); keepAwake();
+  if (finished || idx < 0) { finished = false; rebuild(); running = true; lastTick = now(); enterStep(0); }
+  else { running = true; stepWall = now(); lastTick = now(); render(true); const s = steps[idx]; if (s.om && s.dur - elapsed() > 3) playOm(s.dur - elapsed()); }
+  updateButton();
+}
+function pause() {
+  carried = elapsed(); running = false; stopOm(); if (synth) synth.cancel(); speaking = false; releaseAwake();
+  $('cue').textContent = ui('paused'); $('sub').textContent = ui('pausedSub');
+  updateButton();
+}
+function jump(pi) {
+  if (synth) synth.cancel(); speaking = false;
+  if (idx < 0 || finished) { finished = false; rebuild(); }
+  audio(); keepAwake(); running = true; lastTick = now(); enterStep(phaseStart[pi]); updateButton();
+}
+function finish() {
+  running = false; finished = true; stopOm(); releaseAwake();
+  showIdle('doneCue', 'doneSub', 'complete');
+  document.querySelectorAll('#plan li').forEach(li => { li.classList.remove('active'); li.classList.add('done'); });
+  $('stepTime').textContent = '0:00'; $('leftTime').textContent = '0:00';
+  logToday(); updateButton();
+}
+function showIdle(cueK, subK, ofK) {
+  $('orb').classList.add('idle'); $('orb').style.transform = ''; $('nostrils').hidden = true;
+  $('phaseName').textContent = ''; $('cue').textContent = ui(cueK); $('sub').textContent = ui(subK);
+  $('big').textContent = 'ॐ'; $('of').textContent = ui(ofK); $('caption').textContent = '';
+}
+function reset() {
+  running = false; finished = false; idx = -1; carried = 0; scale = 0.55; stopOm(); if (synth) synth.cancel(); speaking = false; releaseAwake();
+  showIdle('ready', 'readySub', 'tapBegin'); $('stepTime').textContent = '–';
+  rebuild(); updateButton();
+}
+
+$('startBtn').onclick = () => running ? pause() : start();
+$('skipBtn').onclick = () => { if (idx < 0) return jump(Math.min(1, phases.length - 1)); const pi = steps[idx].pi; if (pi + 1 < phases.length) jump(pi + 1); else finish(); };
+$('resetBtn').onclick = reset;
+document.addEventListener('keydown', e => { if (e.code === 'Space' && !/INPUT|SELECT|BUTTON/.test(e.target.tagName)) { e.preventDefault(); running ? pause() : start(); } });
+
+/* ---------- language ---------- */
+const phaseText = p => { const P = T().phases[p.id] || TX.en.phases[p.id]; return { name: P.name, desc: fill(P.desc, p.v) }; };
+function renderLangs() {
+  const box = $('langs'); box.innerHTML = '';
+  LANGS.forEach(code => {
+    const b = document.createElement('button'); b.type = 'button'; b.lang = code; b.textContent = TX[code].meta.name;
+    b.setAttribute('aria-pressed', String(code === S.lang)); b.onclick = () => setLang(code); box.appendChild(b);
+  });
+}
+function applyStaticText() {
+  document.documentElement.lang = S.lang;
+  $('tagline').textContent = ui('tagline'); $('lblStep').textContent = ui('thisStep'); $('lblLeft').textContent = ui('sessionLeft');
+  $('skipBtn').textContent = ui('skip'); $('resetBtn').textContent = ui('restart');
+  $('lblToday').textContent = ui('todays'); $('hint').textContent = ui('hint'); $('langs').setAttribute('aria-label', ui('language'));
+}
+function setLang(code) {
+  if (!TX[code] || code === S.lang) return;
+  S.lang = code; S.voiceName = ''; store.set('prana.settings', S);
+  if (synth) synth.cancel(); speaking = false;
+  renderLangs(); applyStaticText(); loadVoices(); renderPlan(); renderWeek(); updateButton();
+  if (idx >= 0 && !finished) { render(true); if (!running) { $('cue').textContent = ui('paused'); $('sub').textContent = ui('pausedSub'); } }
+  else if (finished) showIdle('doneCue', 'doneSub', 'complete'); else showIdle('ready', 'readySub', 'tapBegin');
+}
+
+/* ---------- plan + bar render ---------- */
+function renderPlan() {
+  const plan = $('plan'), bar = $('bar'); plan.innerHTML = ''; bar.innerHTML = '';
+  let total = 0;
+  phases.forEach((p, pi) => {
+    total += p.dur; const pt = phaseText(p);
+    const li = document.createElement('li'), b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<span><span class="nm"></span><span class="ds"></span></span><span class="du">${fmt(p.dur)}</span>`;
+    b.querySelector('.nm').textContent = pt.name; b.querySelector('.ds').textContent = pt.desc;
+    b.onclick = () => jump(pi); li.appendChild(b); plan.appendChild(li);
+    if (idx >= 0) { const cur = finished ? phases.length : steps[idx].pi; li.classList.toggle('active', pi === cur); li.classList.toggle('done', pi < cur); }
+    const seg = document.createElement('div'); seg.className = 'seg'; seg.dataset.p = pi; seg.style.flex = p.dur; seg.title = pt.name; seg.appendChild(document.createElement('i')); bar.appendChild(seg);
+  });
+  $('total').textContent = ui('about', { n: Math.round(total / 60) });
+  if (idx < 0) $('leftTime').textContent = fmt(total);
+}
+
+/* ---------- settings ---------- */
+const NUMS = ['rounds', 'inhale', 'exhale', 'avRounds', 'avIn', 'avOut', 'medMin'], BOOLS = ['voice', 'om', 'chime'];
+function fillForm() { NUMS.forEach(k => $(k).value = S[k]); BOOLS.forEach(k => $(k).checked = S[k]); $('rate').value = S.rate; }
+$('settings').addEventListener('input', () => {
+  NUMS.forEach(k => { const el = $(k), v = parseFloat(el.value); if (!isNaN(v)) S[k] = Math.min(+el.max, Math.max(+el.min, v)); });
+  BOOLS.forEach(k => S[k] = $(k).checked); S.rate = parseFloat($('rate').value) || 0.9; S.voiceName = $('voiceName').value;
+  store.set('prana.settings', S); loadVoices(); if (idx < 0 || finished) rebuild();
+});
+$('settings').addEventListener('submit', e => e.preventDefault());
+$('testVoice').onclick = () => { const was = S.voice; S.voice = true; if (synth) synth.cancel(); speak(`${line('roundIn', { n: 1 }).say} ${line('roundOutLong').say}`); S.voice = was; };
+$('testOm').onclick = () => { const was = S.om; S.om = true; stopOm(); playOm(9); S.om = was; };
+$('defaults').onclick = () => { const lang = S.lang; S = Object.assign({}, DEFAULTS, { lang }); store.set('prana.settings', S); fillForm(); loadVoices(); rebuild(); };
+
+/* ---------- practice log ---------- */
+const dayKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+function logToday() { const log = store.get('prana.log', []); const k = dayKey(new Date()); if (!log.includes(k)) { log.push(k); store.set('prana.log', log.slice(-400)); } renderWeek(); }
+function renderWeek() {
+  const log = new Set(store.get('prana.log', [])), w = $('week'); w.innerHTML = '';
+  const today = new Date(), fmtDay = new Intl.DateTimeFormat(S.lang, { weekday: 'narrow' });
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today); d.setDate(today.getDate() - i);
+    const s = document.createElement('span'); s.textContent = fmtDay.format(d);
+    if (log.has(dayKey(d))) s.classList.add('on'); if (i === 0) s.classList.add('today');
+    s.title = d.toDateString(); w.appendChild(s);
+  }
+  let streak = 0; const d = new Date(today); if (!log.has(dayKey(d))) d.setDate(d.getDate() - 1);
+  while (log.has(dayKey(d))) { streak++; d.setDate(d.getDate() - 1); }
+  if (streak) { const t = document.createElement('span'); t.className = 'streak'; t.textContent = ui('streak', { n: streak }); w.appendChild(t); }
+}
+
+renderLangs(); applyStaticText(); fillForm(); loadVoices(); rebuild(); renderWeek();
+showIdle('ready', 'readySub', 'tapBegin'); updateButton();
+})();
+</script>
